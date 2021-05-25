@@ -5,9 +5,10 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BidRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(normalizationContext={"groups":"read:collection"})
  * @ORM\Entity(repositoryClass=BidRepository::class)
  */
 class Bid
@@ -16,22 +17,26 @@ class Bid
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("read:collection")
      */
     private $id;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("read:collection")
      */
     private $price;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="bids")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("read:collection")
      */
     private $_user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="bids")
+     * @Groups("read:collection")
      */
     private $product;
 

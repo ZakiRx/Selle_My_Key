@@ -7,9 +7,21 @@ use App\Repository\GenreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"="genre:collection"},
+ *     denormalizationContext={"groups"="genre:write"},
+ *     itemOperations={
+ *     "put",
+ *     "delete",
+ *     "get"={
+ *           "normalization_context"=
+ *            {"groups"={"genre:item","genre:collection"}}
+ *       }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=GenreRepository::class)
  */
 class Genre
@@ -18,16 +30,19 @@ class Genre
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"genre:collection","genre:item"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups({"genre:collection","genre:item","genre:write"})
      */
     private $genre;
 
     /**
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="genre")
+     * @Groups({"genre:item"})
      */
     private $products;
 
