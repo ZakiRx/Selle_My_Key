@@ -2,13 +2,19 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\DiscriminatorMap;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\InheritanceType(value="SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type")
+ * @DiscriminatorMap({"user" = "User", "seller" = "Seller"})
  * @ORM\Table(name="`user`")
  */
 class User

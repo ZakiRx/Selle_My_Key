@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SellerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=SellerRepository::class)
  */
 class Seller extends  User
@@ -23,11 +25,17 @@ class Seller extends  User
      */
     private $orders;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="seller", orphanRemoval=true)
+     */
+    private $products;
+
     public function __construct()
     {
         parent::__construct();
         $this->ratings = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     /**
@@ -84,6 +92,36 @@ class Seller extends  User
             // set the owning side to null (unless already changed)
             if ($order->getSeller() === $this) {
                 $order->setSeller(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->setSeller($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+            if ($product->getSeller() === $this) {
+                $product->setSeller(null);
             }
         }
 

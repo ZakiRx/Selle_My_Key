@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
 class Product
@@ -94,6 +96,12 @@ class Product
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="product", orphanRemoval=true)
      */
     private $comments;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Seller::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $seller;
 
     public function __construct()
     {
@@ -318,6 +326,18 @@ class Product
                 $comment->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSeller(): ?Seller
+    {
+        return $this->seller;
+    }
+
+    public function setSeller(?Seller $seller): self
+    {
+        $this->seller = $seller;
 
         return $this;
     }
