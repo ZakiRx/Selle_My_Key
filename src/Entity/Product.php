@@ -7,9 +7,20 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"="product:collection"},
+ *     denormalizationContext={"groups"="product:write"},
+ *     itemOperations={
+ *     "put",
+ *     "delete",
+ *     "get"={
+ *           "normalization_context"=
+ *            {"groups"={"product:item","product:collection"}}
+ *       }
+ *     })
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
 class Product
@@ -18,88 +29,105 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"product:collection"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"product:collection","product:write"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"product:collection","product:write"})
      */
     private $short_description;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"product:item","product:write"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"product:item","product:write"})
      */
     private $video;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"product:collection","product:write"})
      */
     private $startPrice;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"product:item","product:write"})
      */
     private $minBidPrice;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"product:item","product:write"})
      */
     private $maxBidPrice;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"product:collection","product:item","product:write"})
      */
     private $startedAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"product:collection","product:item","product:write"})
      */
     private $endedAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"product:item","product:write"})
      */
     private $verified;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"product:write"})
      */
     private $enabled;
 
     /**
      * @ORM\OneToMany(targetEntity=Bid::class, mappedBy="product")
+     * @Groups({"product:item"})
      */
     private $bids;
 
     /**
      * @ORM\ManyToOne(targetEntity=Favorite::class, inversedBy="products")
+     * @Groups({"product:collection","product:item"})
      */
     private $favorite;
 
     /**
      * @ORM\ManyToOne(targetEntity=Genre::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"product:collection","product:item","product:write"})
      */
     private $genre;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="product", orphanRemoval=true)
+     * @Groups({"product:item"})
      */
     private $comments;
 
     /**
      * @ORM\ManyToOne(targetEntity=Seller::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"product:collection","product:item","product:write"})
      */
     private $seller;
 

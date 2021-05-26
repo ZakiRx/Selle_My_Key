@@ -5,9 +5,22 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\RateSellerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"="rateSeller:collection"},
+ *     denormalizationContext={"groups"="rateSeller:write"},
+ *     itemOperations={
+ *     "put",
+ *     "delete",
+ *     "patch",
+ *     "get"={
+ *           "normalization_context"=
+ *            {"groups"={"rateSeller:item","rateSeller:collection"}}
+ *       }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=RateSellerRepository::class)
  */
 class RateSeller
@@ -21,18 +34,21 @@ class RateSeller
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"rateSeller:collection,rateSeller:write}"})
      */
     private $numberStars;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="rateSellers")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"rateSeller:item","rateSeller:collection","rateSeller:write"})
      */
     private $_user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Seller::class, inversedBy="ratings")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"rateSeller:item","rateSeller:collection","rateSeller:write"})
      */
     private $seller;
 

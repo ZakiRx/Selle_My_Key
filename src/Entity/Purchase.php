@@ -5,9 +5,21 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PurchaseRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"="purchase:collection"},
+ *     denormalizationContext={"groups"="purchase:write"},
+ *     itemOperations={
+ *     "put",
+ *     "delete",
+ *     "get"={
+ *           "normalization_context"=
+ *            {"groups"={"purchase:item","purchase:collection"}}
+ *       }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=PurchaseRepository::class)
  */
 class Purchase
@@ -16,42 +28,50 @@ class Purchase
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"purchase:collection","purchase:item"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"purchase:collection","purchase:item"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"purchase:collection","purchase:item"})
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="string", length=15)
+     * @Groups({"purchase:collection","purchase:item","purchase:write"})
      */
     private $state;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"purchase:item","purchase:write"})
      */
     private $error;
 
     /**
      * @ORM\OneToOne(targetEntity=Order::class, inversedBy="purchase", cascade={"persist", "remove"})
+     * @Groups({"purchase:collection","purchase:item","purchase:write"})
      */
     private $_order;
 
     /**
      * @ORM\OneToOne(targetEntity=Bid::class, inversedBy="purchase", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"purchase:collection","purchase:item","purchase:write"})
      */
     private $bid;
 
     /**
      * @ORM\OneToOne(targetEntity=Dispute::class, mappedBy="purchase", cascade={"persist", "remove"})
+     * @Groups({"purchase:collection","purchase:item","purchase:write"})
      */
     private $dispute;
 

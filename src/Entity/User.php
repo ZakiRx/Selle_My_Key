@@ -8,9 +8,21 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"user:collection"}},
+ *     denormalizationContext={"groups"={"user:write","seller:write"}},
+ *     itemOperations={
+ *     "put",
+ *     "delete",
+ *     "get"={
+ *           "normalization_context"=
+ *            {"groups"={"user:item","user:collection","seller:item"}}
+ *       }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\InheritanceType(value="SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type")
@@ -23,71 +35,85 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"user:item","user:collection"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=25)
+     * @Groups({"user:item","user:collection","user:write"})
      */
-    private $username;
+    protected $username;
 
     /**
      * @ORM\Column(type="string", length=25, nullable=true)
+     * @Groups({"user:item","user:write"})
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Groups({"user:item","user:write"})
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"user:item","user:write"})
      */
     private $dateBirth;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups({"user:item","user:collection","user:write"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
+     * @Groups({"user:item","user:collection","user:write"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user:write"})
      */
     private $password;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"user:item","user:collection","user:write"})
      */
     private $enabled;
 
     /**
      * @ORM\OneToMany(targetEntity=Bid::class, mappedBy="_user", orphanRemoval=true)
+     * @Groups({"user:item"})
      */
     private $bids;
 
     /**
      * @ORM\OneToMany(targetEntity=RateSeller::class, mappedBy="_user", orphanRemoval=true)
+     * @Groups({"user:item"})
      */
     private $rateSellers;
 
     /**
      * @ORM\OneToOne(targetEntity=Favorite::class, mappedBy="_user", cascade={"persist", "remove"})
+     * @Groups({"user:item"})
      */
     private $favorite;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="_user", orphanRemoval=true)
+     * @Groups({"user:item"})
      */
     private $comments;
 
     /**
      * @ORM\OneToMany(targetEntity=Dispute::class, mappedBy="_user", orphanRemoval=true)
+     * @Groups({"user:item"})
      */
     private $disputes;
 

@@ -5,9 +5,22 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"comment:collection"}},
+ *     denormalizationContext={"groups":"comment:write"},
+ *     itemOperations={
+ *     "put",
+ *     "delete",
+ *     "patch",
+ *     "get"={
+ *      "normalization_context"={"groups"={"comment:item"}}
+ *     }
+ *
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=CommentRepository::class)
  */
 class Comment
@@ -16,28 +29,33 @@ class Comment
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"comment:collection"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"comment:collection","comment:item","comment:write"})
      */
     private $comment;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"comment:collection","comment:item","comment:write"})
      */
     private $enabled;
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"comment:collection","comment:item","comment:write"})
      */
     private $product;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"comment:collection","comment:item","comment:write"})
      */
     private $_user;
 
@@ -53,7 +71,7 @@ class Comment
 
     public function setComment(string $comment): self
     {
-        $this->comment = $comment;
+        $this->comment = true;
 
         return $this;
     }

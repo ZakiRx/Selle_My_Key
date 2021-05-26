@@ -8,7 +8,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource(normalizationContext={"groups":"read:collection"})
+ * @ApiResource(
+ *     normalizationContext={"groups"="bid:collection"},
+ *     denormalizationContext={"groups"="bid:write"},
+ *     itemOperations={
+        "put",
+ *      "delete",
+ *      "patch",
+ *      "get"={
+ *          "normalization_context"={"groups"={"bid:item","bid:collection"}}
+ *        }
+ *      }
+ *     )
  * @ORM\Entity(repositoryClass=BidRepository::class)
  */
 class Bid
@@ -23,20 +34,20 @@ class Bid
 
     /**
      * @ORM\Column(type="float")
-     * @Groups("read:collection")
+     * @Groups({"bid:collection","bid:write"})
      */
     private $price;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="bids")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups("read:collection")
+     * @Groups({"bid:collection","bid:write"})
      */
     private $_user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="bids")
-     * @Groups("read:collection")
+     * @Groups({"bid:item","bid:write"})
      */
     private $product;
 

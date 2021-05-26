@@ -7,9 +7,21 @@ use App\Repository\SellerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"seller:collection","user:collection"}},
+ *     denormalizationContext={"groups"="seller:write","user:write"},
+ *     itemOperations={
+ *     "put",
+ *     "delete",
+ *     "get"={
+ *           "normalization_context"=
+ *            {"groups"={"seller:item","seller:collection","user:item","user:collection"}}
+ *       }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=SellerRepository::class)
  */
 class Seller extends  User
@@ -17,16 +29,19 @@ class Seller extends  User
 
     /**
      * @ORM\OneToMany(targetEntity=RateSeller::class, mappedBy="seller", orphanRemoval=true)
+     * @Groups({"seller:collection","seller:item"})
      */
     private $ratings;
 
     /**
      * @ORM\OneToMany(targetEntity=Order::class, mappedBy="seller")
+     * @Groups({"seller:collection","seller:item"})
      */
     private $orders;
 
     /**
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="seller", orphanRemoval=true)
+     * @Groups({"seller:item"})
      */
     private $products;
 

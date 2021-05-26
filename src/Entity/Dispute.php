@@ -5,9 +5,21 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\DisputeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"="dispute:item"},
+ *     denormalizationContext={"groups"="dispute:write"},
+ *     itemOperations={
+ *       "put",
+ *       "delete",
+ *       "patch",
+ *       "get"={
+ *       "normalization_context"={"groups"={"dispute:item"}}
+ *       },
+ *      }
+ *     )
  * @ORM\Entity(repositoryClass=DisputeRepository::class)
  */
 class Dispute
@@ -16,38 +28,45 @@ class Dispute
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("dispute:item")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"dispute:item","dispute:write",})
      */
     private $subject;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"dispute:item","dispute:write"})
      */
     private $message;
 
     /**
      * @ORM\OneToOne(targetEntity=Purchase::class, inversedBy="dispute", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"dispute:item","dispute:write"})
      */
     private $purchase;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"dispute:item"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"dispute:item"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="disputes")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"dispute:item"})
      */
     private $_user;
 
