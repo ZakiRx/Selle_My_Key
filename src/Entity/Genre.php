@@ -30,13 +30,13 @@ class Genre
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"genre:collection","genre:item"})
+     * @Groups({"genre:collection","product:read","genre:item"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"genre:collection","genre:item","genre:write"})
+     * @Groups({"genre:collection","product:read","genre:item","genre:write"})
      */
     private $genre;
 

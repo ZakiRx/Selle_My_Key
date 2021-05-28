@@ -9,14 +9,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     normalizationContext={"groups"="bid:collection"},
+ *     normalizationContext={"groups"={"bid:collection","bid:read"}},
  *     denormalizationContext={"groups"="bid:write"},
  *     itemOperations={
         "put",
  *      "delete",
  *      "patch",
  *      "get"={
- *          "normalization_context"={"groups"={"bid:item","bid:collection"}}
+ *          "normalization_context"={"groups"={"bid:item","bid:collection","bid:read"}}
  *        }
  *      }
  *     )
@@ -34,14 +34,14 @@ class Bid
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"bid:collection","bid:write"})
+     * @Groups({"bid:collection","product:read","bid:write"})
      */
     private $price;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="bids")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"bid:collection","bid:write"})
+     * @Groups({"bid:collection","product:read","bid:write"})
      */
     private $_user;
 

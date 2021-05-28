@@ -35,13 +35,13 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"user:item","user:collection"})
+     * @Groups({"user:item","bid:read","user:collection"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=25)
-     * @Groups({"user:item","user:collection","user:write"})
+     * @Groups({"user:item","product:read","bid:read","user:collection","user:write"})
      */
     protected $username;
 

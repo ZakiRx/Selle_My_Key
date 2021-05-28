@@ -29,13 +29,13 @@ class Comment
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"comment:collection"})
+     * @Groups({"comment:collection","product:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"comment:collection","comment:item","comment:write"})
+     * @Groups({"comment:collection","product:read","comment:item","comment:write"})
      */
     private $comment;
 
@@ -55,7 +55,7 @@ class Comment
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"comment:collection","comment:item","comment:write"})
+     * @Groups({"comment:collection","product:read","comment:item","comment:write"})
      */
     private $_user;
 
