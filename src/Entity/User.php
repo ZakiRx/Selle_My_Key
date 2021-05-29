@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -29,7 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @DiscriminatorMap({"user" = "User", "seller" = "Seller"})
  * @ORM\Table(name="`user`")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id
@@ -40,11 +41,10 @@ class User
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"user:item","product:read","bid:read","user:collection","user:write"})
      */
-    protected $username;
-
+    private $username;
     /**
      * @ORM\Column(type="string", length=25, nullable=true)
      * @Groups({"user:item","user:write"})
@@ -74,13 +74,18 @@ class User
      * @Groups({"user:item","user:collection","user:write"})
      */
     private $phone;
+    /**
+     * @ORM\Column(type="json")
+     * @Groups({"user:item","user:write"})
+     */
+    private $roles = [];
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      * @Groups({"user:write"})
      */
     private $password;
-
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"user:item","user:collection","user:write"})
@@ -125,14 +130,83 @@ class User
         $this->disputes = new ArrayCollection();
     }
 
+
     public function getId(): ?int
     {
         return $this->id;
     }
-
-    public function getUsername(): ?string
+    /**
+     * @return mixed
+     */
+    public function getFirstName()
     {
-        return $this->username;
+        return $this->firstName;
+    }
+
+    /**
+     * @param mixed $firstName
+     */
+    public function setFirstName($firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param mixed $lastName
+     */
+    public function setLastName($lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateBirth()
+    {
+        return $this->dateBirth;
+    }
+
+    /**
+     * @param mixed $dateBirth
+     */
+    public function setDateBirth($dateBirth): void
+    {
+        $this->dateBirth = $dateBirth;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param mixed $email
+     */
+    public function setEmail($email): void
+    {
+        $this->email = $email;
+    }
+
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -142,67 +216,28 @@ class User
         return $this;
     }
 
-    public function getFirstName(): ?string
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        return $this->firstName;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
     }
 
-    public function setFirstName(?string $firstName): self
+    public function setRoles(array $roles): self
     {
-        $this->firstName = $firstName;
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(string $lastName): self
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getDateBirth(): ?\DateTimeInterface
-    {
-        return $this->dateBirth;
-    }
-
-    public function setDateBirth(?\DateTimeInterface $dateBirth): self
-    {
-        $this->dateBirth = $dateBirth;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(?string $phone): self
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -212,6 +247,22 @@ class User
         $this->password = $password;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param mixed $phone
+     */
+    public function setPhone($phone): void
+    {
+        $this->phone = $phone;
     }
 
     public function getEnabled(): ?bool
@@ -361,5 +412,25 @@ class User
         }
 
         return $this;
+    }
+
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }
