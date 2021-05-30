@@ -43,7 +43,7 @@ class Bid
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"bid:collection","product:read","bid:write"})
      */
-    private $_user;
+    private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="bids")
@@ -75,12 +75,12 @@ class Bid
 
     public function getUser(): ?User
     {
-        return $this->_user;
+        return $this->user;
     }
 
     public function setUser(?User $_user): self
     {
-        $this->_user = $_user;
+        $this->user = $_user;
 
         return $this;
     }

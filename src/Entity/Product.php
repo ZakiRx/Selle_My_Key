@@ -43,7 +43,7 @@ class Product
      * @ORM\Column(type="string", length=255)
      * @Groups({"product:collection","product:write"})
      */
-    private $short_description;
+    private $shortDescription;
 
     /**
      * @ORM\Column(type="text")
@@ -131,6 +131,17 @@ class Product
      */
     private $seller;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imageName;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Groups({"product:collection","product:item","product:write"})
+     */
+    private $crrentPrice;
+
     public function __construct()
     {
         $this->bids = new ArrayCollection();
@@ -156,12 +167,12 @@ class Product
 
     public function getShortDescription(): ?string
     {
-        return $this->short_description;
+        return $this->shortDescription;
     }
 
-    public function setShortDescription(string $short_description): self
+    public function setShortDescription(string $shortDescription): self
     {
-        $this->short_description = $short_description;
+        $this->shortDescription = $shortDescription;
 
         return $this;
     }
@@ -366,6 +377,30 @@ class Product
     public function setSeller(?Seller $seller): self
     {
         $this->seller = $seller;
+
+        return $this;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageName(?string $imageName): self
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    public function getCrrentPrice(): ?int
+    {
+        return $this->crrentPrice;
+    }
+
+    public function setCrrentPrice(int $crrentPrice): self
+    {
+        $this->crrentPrice = $crrentPrice;
 
         return $this;
     }
