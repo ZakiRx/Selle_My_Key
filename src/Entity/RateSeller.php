@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\RateSellerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -39,6 +40,7 @@ class RateSeller
     /**
      * @ORM\Column(type="integer")
      * @Groups({"rateSeller:collection,rateSeller:write}"})
+     * @Assert\Positive()
      */
     private $numberStars;
 

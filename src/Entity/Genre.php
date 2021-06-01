@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -40,6 +41,7 @@ class Genre
     /**
      * @ORM\Column(type="string", length=50)
      * @Groups({"genre:collection","product:read","genre:item","genre:write"})
+     * @Assert\Length(min=5,max=50)
      */
     private $genre;
 

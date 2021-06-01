@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\DisputeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -40,12 +41,14 @@ class Dispute
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"dispute:item","dispute:write",})
+     * @Assert\Length(min=5,max=255)
      */
     private $subject;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"dispute:item","dispute:write"})
+     * @Assert\Length(min=5,max=500)
      */
     private $message;
 
@@ -59,12 +62,14 @@ class Dispute
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"dispute:item"})
+     * @Assert\DateTime()
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"dispute:item"})
+     * @Assert\DateTime()
      */
     private $updatedAt;
 

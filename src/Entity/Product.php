@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -40,66 +41,85 @@ class Product
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"product:collection","product:write"})
+     * @Assert\Length(min=5,max=20,maxMessage="name must be under then {{max}} char",minMessage="name must be over then {{min}} char")
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"product:collection","product:write"})
+     * @Assert\Length(min=5,max=75)*
+     * @Assert\NotBlank()
      */
     private $shortDescription;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"product:item","product:write"})
+     * @Assert\Length(min=5)
+     * @Assert\NotBlank()
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"product:item","product:write"})
+     * @Assert\Url()
      */
     private $video;
 
     /**
      * @ORM\Column(type="float")
      * @Groups({"product:collection","product:write"})
+     * @Assert\Positive()
+     * @Assert\NotBlank()
      */
     private $startPrice;
 
     /**
      * @ORM\Column(type="float")
      * @Groups({"product:item","product:write"})
+     * @Assert\Positive()
+     * @Assert\NotBlank()
      */
     private $minBidPrice;
 
     /**
      * @ORM\Column(type="float")
      * @Groups({"product:item","product:write"})
+     * @Assert\Positive()
+     * @Assert\NotBlank()
      */
     private $maxBidPrice;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"product:collection","product:item","product:write"})
+     * @Assert\DateTime()
+     * @Assert\NotBlank()
      */
     private $startedAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"product:collection","product:item","product:write"})
+     * @Assert\DateTime()
+     * @Assert\NotBlank()
      */
     private $endedAt;
 
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"product:item","product:write"})
+     * @Assert\NotBlank()
      */
     private $verified;
 
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"product:write"})
+     * @Assert\NotBlank()
      */
     private $enabled;
 

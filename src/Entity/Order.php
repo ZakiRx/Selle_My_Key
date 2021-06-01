@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 
 /**
  * @ApiResource(
@@ -34,7 +36,9 @@ class Order
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
      */
     private $numOrder;
 
@@ -46,11 +50,13 @@ class Order
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\DateTime()
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @Assert\Length(min=2,max=5)
      */
     private $status;
 

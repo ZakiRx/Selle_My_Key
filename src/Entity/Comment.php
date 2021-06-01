@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -41,6 +42,7 @@ class Comment
     /**
      * @ORM\Column(type="text")
      * @Groups({"comment:collection","product:read","comment:item","comment:write"})
+     * @Assert\Length(min=2,max=500)
      */
     private $comment;
 

@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PurchaseRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -36,24 +37,29 @@ class Purchase
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"purchase:collection","purchase:item"})
+     * @Assert\DateTime()
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"purchase:collection","purchase:item"})
+     * @Assert\DateTime()
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="string", length=15)
      * @Groups({"purchase:collection","purchase:item","purchase:write"})
+     * @Assert\Length(min=5,max=15)
+     * @Assert\NotBlank()
      */
     private $state;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text",nullable=true)
      * @Groups({"purchase:item","purchase:write"})
+     *
      */
     private $error;
 

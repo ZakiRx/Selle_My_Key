@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BidRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -38,6 +39,7 @@ class Bid
     /**
      * @ORM\Column(type="float")
      * @Groups({"bid:collection","product:read","bid:write"})
+     * @Assert\Currency()
      */
     private $price;
 

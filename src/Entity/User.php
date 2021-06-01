@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -42,35 +43,54 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"user:item","product:read","bid:read","user:collection","user:write"})
+     * @Assert\NotBlank()
+     * @Assert\Length(min=3,max=20)
      */
     private $username;
     /**
      * @ORM\Column(type="string", length=25, nullable=true)
      * @Groups({"user:item","user:write"})
+     * @Assert\NotBlank()
+     * @Assert\Length(min=3,max=50)
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Your firstName cannot contain a number"
+     * )
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=30)
      * @Groups({"user:item","user:write"})
+     * @Assert\Length(min=3,max=50)
+     * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Your lastName cannot contain a number"
+     * )
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"user:item","user:write"})
+     * @Assert\Date()
      */
     private $dateBirth;
 
     /**
      * @ORM\Column(type="string", length=50)
      * @Groups({"user:item","user:collection","user:write"})
+     * @Assert\Email()
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      * @Groups({"user:item","user:collection","user:write"})
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/(\(\+\d{3}|0)([ \-_/]*)(\d[ \-_/]*){9}/g",match=true,message="Phone Number no valid")
      */
     private $phone;
     /**
@@ -83,6 +103,8 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Groups({"user:write"})
+     * @Assert\NotBlank()
+     * @Assert\Length(min=6,max=255)
      */
     private $password;
     /**
