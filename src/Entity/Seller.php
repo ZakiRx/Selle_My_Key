@@ -14,11 +14,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     normalizationContext={"groups"={"seller:collection","user:collection"}},
  *     denormalizationContext={"groups"="seller:write","user:write"},
  *     itemOperations={
- *     "put",
- *     "delete",
+ *     "put"={"security"="is_granted('ROLE_ADMIN') or object==user"},
+ *     "delete"={"security"="is_granted('ROLE_ADMIN') or object==user"},
  *     "get"={
- *           "normalization_context"=
- *            {"groups"={"seller:item","seller:collection","user:item","user:collection"}}
+ *           "normalization_context"={"groups"={"seller:item","seller:collection","user:item","user:collection"}}
  *       }
  *     }
  * )

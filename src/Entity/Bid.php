@@ -11,12 +11,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"bid:collection","bid:read"}},
  *     denormalizationContext={"groups"="bid:write"},
+ *     collectionOperations={
+ *     "get",
+ *     "post"={"security"="is_granted('ROLE_ADMIN','ROLE_USER')"}
+ *     },
  *     itemOperations={
-        "put",
- *      "delete",
- *      "patch",
+ *      "delete"={"security"="is_granted('ROLE_ADMIN')"},
  *      "get"={
- *          "normalization_context"={"groups"={"bid:item","bid:collection","bid:read"}}
+ *          "normalization_context"={"groups"={"bid:item","bid:collection","bid:read"}},
+ *          "security"="is_granted('ROLE_ADMIN','ROLE_USER')"
  *        }
  *      }
  *     )

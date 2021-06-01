@@ -11,12 +11,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"="purchase:collection"},
  *     denormalizationContext={"groups"="purchase:write"},
+ *     collectionOperations={
+ *     "get"={"security"="is_granted('ROLE_ADMIN') or object.getBid().getUser()==user"},
+ *     },
  *     itemOperations={
- *     "put",
- *     "delete",
  *     "get"={
- *           "normalization_context"=
- *            {"groups"={"purchase:item","purchase:collection"}}
+ *           "normalization_context"={"groups"={"purchase:item","purchase:collection"}},
+ *           "security"="is_granted('ROLE_ADMIN') or object.getBid().getUser()==user"
  *       }
  *     }
  * )
@@ -60,7 +61,7 @@ class Purchase
      * @ORM\OneToOne(targetEntity=Order::class, inversedBy="purchase", cascade={"persist", "remove"})
      * @Groups({"purchase:collection","purchase:item","purchase:write"})
      */
-    private $_order;
+    private $order;
 
     /**
      * @ORM\OneToOne(targetEntity=Bid::class, inversedBy="purchase", cascade={"persist", "remove"})
@@ -130,12 +131,12 @@ class Purchase
 
     public function getOrder(): ?Order
     {
-        return $this->_order;
+        return $this->order;
     }
 
-    public function setOrder(?Order $_order): self
+    public function setOrder(?Order $order): self
     {
-        $this->_order = $_order;
+        $this->order = $order;
 
         return $this;
     }

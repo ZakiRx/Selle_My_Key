@@ -16,11 +16,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     normalizationContext={"groups"={"user:collection"}},
  *     denormalizationContext={"groups"={"user:write","seller:write"}},
  *     itemOperations={
- *     "put",
- *     "delete",
+ *     "put"={"security"="is_granted('ROLE_ADMIN') or object==user"},
+ *     "delete"={"security"="is_granted('ROLE_ADMIN') or object==user"},
  *     "get"={
- *           "normalization_context"=
- *            {"groups"={"user:item","user:collection","seller:item"}}
+ *           "normalization_context"={"groups"={"user:item","user:collection","seller:item"}}
  *       }
  *     }
  * )
@@ -93,31 +92,31 @@ class User implements UserInterface
     private $enabled;
 
     /**
-     * @ORM\OneToMany(targetEntity=Bid::class, mappedBy="_user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Bid::class, mappedBy="user", orphanRemoval=true)
      * @Groups({"user:item"})
      */
     private $bids;
 
     /**
-     * @ORM\OneToMany(targetEntity=RateSeller::class, mappedBy="_user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=RateSeller::class, mappedBy="user", orphanRemoval=true)
      * @Groups({"user:item"})
      */
     private $rateSellers;
 
     /**
-     * @ORM\OneToOne(targetEntity=Favorite::class, mappedBy="_user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Favorite::class, mappedBy="user", cascade={"persist", "remove"})
      * @Groups({"user:item"})
      */
     private $favorite;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="_user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user", orphanRemoval=true)
      * @Groups({"user:item"})
      */
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity=Dispute::class, mappedBy="_user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Dispute::class, mappedBy="user", orphanRemoval=true)
      * @Groups({"user:item"})
      */
     private $disputes;

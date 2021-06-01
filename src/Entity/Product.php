@@ -13,12 +13,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"={"product:collection","product:read"}},
  *     denormalizationContext={"groups"="product:write"},
+ *     collectionOperations={
+ *     "get",
+ *     "post"={"security"="is_granted('ROLE_SELLER','ROLE_ADMIN')"}
+ *     },
  *     itemOperations={
- *     "put",
- *     "delete",
+ *     "put"={"security"="is_granted('ROLE_ADMIN') or object.getSeller() == user"},
+ *     "delete"={"security"="is_granted('ROLE_ADMIN') or object.getSeller() == user"},
+ *     "patch"={"security"="is_granted('ROLE_ADMIN') or object.getSeller() == user"},
  *     "get"={
- *           "normalization_context"=
- *            {"groups"={"product:item","product:collection","product:read"}}
+ *           "normalization_context"={"groups"={"product:item","product:collection","product:read"}}
  *       }
  *     })
  * @ORM\Entity(repositoryClass=ProductRepository::class)

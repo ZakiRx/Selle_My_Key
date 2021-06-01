@@ -11,13 +11,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"="rateSeller:collection"},
  *     denormalizationContext={"groups"="rateSeller:write"},
+ *     collectionOperations={
+ *     "get",
+ *     "post"={"security"="is_granted('ROLE_USER')"}
+ *     },
  *     itemOperations={
- *     "put",
- *     "delete",
- *     "patch",
+ *     "put"={"security"="is_granted('ROLE_ADMIN')"},
+ *     "delete"={"security"="is_granted('ROLE_ADMIN')"},
+ *     "patch"={"security"="is_granted('ROLE_ADMIN')"},
  *     "get"={
- *           "normalization_context"=
- *            {"groups"={"rateSeller:item","rateSeller:collection"}}
+ *           "normalization_context"={"groups"={"rateSeller:item","rateSeller:collection"}},
+ *           "security"="is_granted('ROLE_ADMIN') or object.getUser()==user or object.getSeller()==user"
  *       }
  *     }
  * )
@@ -43,7 +47,7 @@ class RateSeller
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"rateSeller:item","rateSeller:collection","rateSeller:write"})
      */
-    private $_user;
+    private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Seller::class, inversedBy="ratings")
@@ -71,12 +75,12 @@ class RateSeller
 
     public function getUser(): ?User
     {
-        return $this->_user;
+        return $this->user;
     }
 
-    public function setUser(?User $_user): self
+    public function setUser(?User $user): self
     {
-        $this->_user = $_user;
+        $this->user = $user;
 
         return $this;
     }

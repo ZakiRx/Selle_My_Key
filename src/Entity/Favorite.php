@@ -13,12 +13,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"="favotire:collection"},
  *     denormalizationContext={"groups"="favorite:write"},
+ *     openapiContext={
+ *     "post"={"security"="is_granted('ROLE_ADMIN','ROLE_USER')"}
+ *     },
  *      itemOperations={
- *       "put",
- *       "delete",
- *       "patch",
+ *       "put"={"security"="is_granted('ROLE_ADMIN') or object.getUser()==user"},
+ *       "delete"={"security"="is_granted('ROLE_ADMIN') or object.getUser()==user"},
+ *       "patch"={"security"="is_granted('ROLE_ADMIN') or object.getUser()==user"},
  *       "get"={
- *          "normalization_context"={"groups"={"favotire:item","favotire:collection"}}
+ *          "normalization_context"={"groups"={"favotire:item","favotire:collection"}},
+ *          "security"="is_granted('ROLE_ADMIN') or object.getUser()==user"
  *        }
  *      }
  *     )
@@ -45,7 +49,7 @@ class Favorite
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"favotire:collection","favorite:write"})
      */
-    private $_user;
+    private $user;
 
     public function __construct()
     {
@@ -89,12 +93,12 @@ class Favorite
 
     public function getUser(): ?User
     {
-        return $this->_user;
+        return $this->user;
     }
 
-    public function setUser(User $_user): self
+    public function setUser(User $user): self
     {
-        $this->_user = $_user;
+        $this->user = $user;
 
         return $this;
     }

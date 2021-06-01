@@ -11,12 +11,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     normalizationContext={"groups"="dispute:item"},
  *     denormalizationContext={"groups"="dispute:write"},
+ *     collectionOperations={
+ *     "get"={"security"="is_granted('ROLE_ADMIN') or object.getPurchase().getBid().getUser()==user"},
+ *     "post"={"security"="is_granted('ROLE_ADMIN','ROLE_USER')"}
+ *     },
  *     itemOperations={
- *       "put",
- *       "delete",
- *       "patch",
+ *       "put"={"security"="is_granted('ROLE_ADMIN') or object.getPurchase().getBid().getUser()==user"},
+ *       "delete"={"security"="is_granted('ROLE_ADMIN') or object.getPurchase().getBid().getUser()==user"},
+ *       "patch"={"security"="is_granted('ROLE_ADMIN') or object.getPurchase().getBid().getUser()==user"},
  *       "get"={
- *       "normalization_context"={"groups"={"dispute:item"}}
+ *       "normalization_context"={"groups"={"dispute:item"}},
+ *       "security"="is_granted('ROLE_ADMIN') or object.getPurchase().getBid().getUser()==user"
  *       },
  *      }
  *     )
@@ -68,7 +73,7 @@ class Dispute
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"dispute:item"})
      */
-    private $_user;
+    private $user;
 
     public function getId(): ?int
     {
@@ -137,12 +142,12 @@ class Dispute
 
     public function getUser(): ?User
     {
-        return $this->_user;
+        return $this->user;
     }
 
-    public function setUser(?User $_user): self
+    public function setUser(?User $user): self
     {
-        $this->_user = $_user;
+        $this->user = $user;
 
         return $this;
     }
