@@ -39,7 +39,7 @@ class Favorite
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="favorite")
+     * @ORM\ManyToMany(targetEntity=Product::class, inversedBy="favorites")
      * @Groups({"favotire:item","favorite:write"})
      */
     private $products;
@@ -73,19 +73,16 @@ class Favorite
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
-            $product->setFavorite($this);
+            $product->addFavorites($this);
         }
-
         return $this;
     }
 
     public function removeProduct(Product $product): self
     {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getFavorite() === $this) {
-                $product->setFavorite(null);
-            }
+        if ($this->products->contains($product)){
+            $this->products->removeElement($product);
+
         }
 
         return $this;
@@ -98,7 +95,9 @@ class Favorite
 
     public function setUser(User $user): self
     {
-        $this->user = $user;
+        if($this->user===null){
+            $this->user = $user;
+        }
 
         return $this;
     }

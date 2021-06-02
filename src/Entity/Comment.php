@@ -78,7 +78,7 @@ class Comment
 
     public function setComment(string $comment): self
     {
-        $this->comment = true;
+        $this->comment = $comment;
 
         return $this;
     }

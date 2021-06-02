@@ -64,7 +64,7 @@ class Purchase
     private $error;
 
     /**
-     * @ORM\OneToOne(targetEntity=Order::class, inversedBy="purchase", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Order::class, mappedBy="purchase", cascade={"persist", "remove"})
      * @Groups({"purchase:collection","purchase:item","purchase:write"})
      */
     private $order;

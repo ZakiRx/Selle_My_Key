@@ -130,10 +130,10 @@ class Product
     private $bids;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Favorite::class, inversedBy="products")
+     * @ORM\ManyToMany(targetEntity=Favorite::class, mappedBy="products")
      * @Groups({"product:collection","product:item"})
      */
-    private $favorite;
+    private $favorites;
 
     /**
      * @ORM\ManyToOne(targetEntity=Genre::class, inversedBy="products")
@@ -161,15 +161,16 @@ class Product
     private $imageName;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      * @Groups({"product:collection","product:item","product:write"})
      */
-    private $crrentPrice;
+    private $currentPrice;
 
     public function __construct()
     {
         $this->bids = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->favorites= new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -339,18 +340,19 @@ class Product
         return $this;
     }
 
-    public function getFavorite(): ?Favorite
+    public function getFavorites(): ArrayCollection
     {
-        return $this->favorite;
+        return $this->favorites;
     }
 
-    public function setFavorite(?Favorite $favorite): self
+    public function addFavorites(?Favorite $favorite): self
     {
-        $this->favorite = $favorite;
-
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites[] = $favorite;
+        }
         return $this;
-    }
 
+    }
     public function getGenre(): ?Genre
     {
         return $this->genre;
@@ -419,12 +421,12 @@ class Product
 
     public function getCrrentPrice(): ?int
     {
-        return $this->crrentPrice;
+        return $this->currentPrice;
     }
 
-    public function setCrrentPrice(int $crrentPrice): self
+    public function setCrrentPrice(float $crrentPrice): self
     {
-        $this->crrentPrice = $crrentPrice;
+        $this->currentPrice = $crrentPrice;
 
         return $this;
     }

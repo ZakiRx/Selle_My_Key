@@ -6,7 +6,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 
 /**
  * @ApiResource(
@@ -60,9 +59,14 @@ class Order
     private $status;
 
     /**
-     * @ORM\OneToOne(targetEntity=Purchase::class, mappedBy="order", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Purchase::class, inversedBy="order", cascade={"persist", "remove"})
      */
     private $purchase;
+
+    public function __construct()
+    {
+        $this->numOrder=uuid_create(UUID_TYPE_RANDOM);
+    }
 
     public function getId(): ?int
     {
