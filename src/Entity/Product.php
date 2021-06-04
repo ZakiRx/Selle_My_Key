@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={"groups"="product:write"},
  *     collectionOperations={
  *     "get",
- *     "post"={"security"="is_granted('ROLE_SELLER','ROLE_ADMIN')"}
+ *     "post"={"security"="is_granted('ROLE_SELLER')"}
  *     },
  *     itemOperations={
  *     "put"={"security"="is_granted('ROLE_ADMIN') or object.getSeller() == user"},
@@ -163,6 +163,7 @@ class Product
     /**
      * @ORM\Column(type="float")
      * @Groups({"product:collection","product:item","product:write"})
+     * @Assert\Positive()
      */
     private $currentPrice;
 
@@ -340,7 +341,7 @@ class Product
         return $this;
     }
 
-    public function getFavorites(): ArrayCollection
+    public function getFavorites(): Collection
     {
         return $this->favorites;
     }
@@ -419,14 +420,14 @@ class Product
         return $this;
     }
 
-    public function getCrrentPrice(): ?int
+    public function getCurrentPrice(): ?float
     {
         return $this->currentPrice;
     }
 
-    public function setCrrentPrice(float $crrentPrice): self
+    public function setCurrentPrice(float $currentPrice): self
     {
-        $this->currentPrice = $crrentPrice;
+        $this->currentPrice = $currentPrice;
 
         return $this;
     }

@@ -143,6 +143,12 @@ class User implements UserInterface
      */
     private $disputes;
 
+    /**
+     * @ORM\Column(type="float")
+     * @Groups({"user:item","user:write"})
+     */
+    private $balance;
+
     public function __construct()
     {
         $this->bids = new ArrayCollection();
@@ -453,5 +459,17 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getBalance(): ?float
+    {
+        return $this->balance;
+    }
+
+    public function setBalance(float $balance): self
+    {
+        $this->balance = $balance;
+
+        return $this;
     }
 }

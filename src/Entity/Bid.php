@@ -14,13 +14,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={"groups"="bid:write"},
  *     collectionOperations={
  *     "get",
- *     "post"={"security"="is_granted('ROLE_ADMIN','ROLE_USER')"}
+ *     "post"={"security"="is_granted('ROLE_USER')"}
  *     },
  *     itemOperations={
  *      "delete"={"security"="is_granted('ROLE_ADMIN')"},
  *      "get"={
  *          "normalization_context"={"groups"={"bid:item","bid:collection","bid:read"}},
- *          "security"="is_granted('ROLE_ADMIN','ROLE_USER')"
+ *          "security"="is_granted('ROLE_USER')"
  *        }
  *      }
  *     )
@@ -39,7 +39,7 @@ class Bid
     /**
      * @ORM\Column(type="float")
      * @Groups({"bid:collection","product:read","bid:write"})
-     * @Assert\Currency()
+     * @Assert\Positive()
      */
     private $price;
 

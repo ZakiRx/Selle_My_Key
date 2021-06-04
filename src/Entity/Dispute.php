@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={"groups"="dispute:write"},
  *     collectionOperations={
  *     "get"={"security"="is_granted('ROLE_ADMIN') or object.getPurchase().getBid().getUser()==user"},
- *     "post"={"security"="is_granted('ROLE_ADMIN','ROLE_USER')"}
+ *     "post"={"security"="is_granted('ROLE_USER')"}
  *     },
  *     itemOperations={
  *       "put"={"security"="is_granted('ROLE_ADMIN') or object.getPurchase().getBid().getUser()==user"},
