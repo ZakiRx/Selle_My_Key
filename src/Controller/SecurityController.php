@@ -11,7 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SecurityController extends AbstractController
 {
-
     /**
      * @Route(path="/api/login",name="login",methods={"POST"})
      */

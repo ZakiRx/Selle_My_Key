@@ -61,7 +61,7 @@ class User implements UserInterface
     private $firstName;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=30,nullable=true)
      * @Groups({"user:item","user:write"})
      * @Assert\Length(min=3,max=50)
      * @Assert\Regex(
@@ -73,7 +73,7 @@ class User implements UserInterface
     private $lastName;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date", nullable=true,nullable=true)
      * @Groups({"user:item","user:write"})
      * @Assert\Date()
      */
@@ -299,6 +299,9 @@ class User implements UserInterface
 
     public function setEnabled(bool $enabled): self
     {
+        if($enabled==null){
+            $enabled=false;
+        }
         $this->enabled = $enabled;
 
         return $this;

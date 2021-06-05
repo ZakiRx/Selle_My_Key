@@ -19,22 +19,40 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    // /**
-    //  * @return Product[] Returns an array of Product objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+      * @return Product[] Returns an array of Product objects
+     */
+
+    public function getEnabledAndVerifiedProducts(): array
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+            ->Where('p.verified = :verifiedProduct')
+            ->andWhere('p.enabled = :enabledProduct')
+            ->setParameter('verifiedProduct', true)
+            ->setParameter('enabledProduct',true)
             ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getEnabledAndVerifiedProduct($id): ?Product
+    {
+        return $this->createQueryBuilder('p')
+            ->Where('p.verified = :verifiedProduct')
+            ->andWhere('p.enabled = :enabledProduct')
+            ->andWhere("p.id=:id")
+            ->setParameter('verifiedProduct', true)
+            ->setParameter('enabledProduct',true)
+            ->setParameter('id', $id)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 
     /*
     public function findOneBySomeField($value): ?Product

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -9,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 
 /**
  * @ApiResource(
@@ -26,6 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *           "normalization_context"={"groups"={"product:item","product:collection","product:read"}}
  *       }
  *     })
+ * @ApiFilter(BooleanFilter::class,properties={"verified","enabled"})
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
 class Product
@@ -294,6 +297,9 @@ class Product
 
     public function setVerified(bool $verified): self
     {
+        if($verified==null){
+            $verified=false;
+        }
         $this->verified = $verified;
 
         return $this;
@@ -306,6 +312,9 @@ class Product
 
     public function setEnabled(bool $enabled): self
     {
+        if($enabled==null){
+            $enabled=false;
+        }
         $this->enabled = $enabled;
 
         return $this;
