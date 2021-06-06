@@ -25,6 +25,10 @@ security:
             pattern: ^/api/token/refresh
             stateless: true
             anonymous: true
+        signUp:
+            pattern: ^/api/users
+            stateless: true
+            anonymous: true
         api:
             pattern: ^/api
             stateless: true
@@ -47,9 +51,9 @@ security:
         ROLE_SELLER: ROLE_USER
 
     access_control:
+         - { path: ^/api/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/api/products, roles: IS_AUTHENTICATED_ANONYMOUSLY}
-         - { path: ^/api/users, roles: ROLE_USER}
+         - { path: ^/api/products, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/api, roles: IS_AUTHENTICATED_FULLY}
 

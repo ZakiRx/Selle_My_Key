@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -16,6 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource(
  *     normalizationContext={"groups"={"user:collection"}},
  *     denormalizationContext={"groups"={"user:write","seller:write"}},
+ *     collectionOperations={
+ *     "get",
+ *     "post"={"security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"}
+ *     },
  *     itemOperations={
  *     "put"={"security"="is_granted('ROLE_ADMIN') or object==user"},
  *     "delete"={"security"="is_granted('ROLE_ADMIN') or object==user"},
@@ -80,8 +85,9 @@ class User implements UserInterface
     private $dateBirth;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50,unique=true)
      * @Groups({"user:item","user:collection","user:write"})
+     * @Assert\NotBlank()
      * @Assert\Email()
      */
     private $email;
@@ -89,7 +95,6 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
      * @Groups({"user:item","user:collection","user:write"})
-     * @Assert\NotBlank()
      * @Assert\Regex(pattern="/(\(\+\d{3}|0)([ \-_/]*)(\d[ \-_/]*){9}/g",match=true,message="Phone Number no valid")
      */
     private $phone;
@@ -108,7 +113,7 @@ class User implements UserInterface
      */
     private $password;
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean",nullable=true,options={"default" : 0})
      * @Groups({"user:item","user:collection","user:write"})
      */
     private $enabled;
@@ -144,7 +149,7 @@ class User implements UserInterface
     private $disputes;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true, options={"default" : 0})
      * @Groups({"user:item","user:write"})
      */
     private $balance;
@@ -297,7 +302,7 @@ class User implements UserInterface
         return $this->enabled;
     }
 
-    public function setEnabled(bool $enabled): self
+    public function setEnabled($enabled=false): self
     {
         if($enabled==null){
             $enabled=false;
@@ -469,8 +474,12 @@ class User implements UserInterface
         return $this->balance;
     }
 
-    public function setBalance(float $balance): self
+    public function setBalance(float $balance=0): self
     {
+
+        if($balance==null){
+            $balance=0;
+        }
         $this->balance = $balance;
 
         return $this;

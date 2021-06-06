@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\DataFixture;
+namespace App\DataFixtures;
 
 
 use App\Entity\Bid;
@@ -108,6 +108,7 @@ class AppFixture extends Fixture
         $user->setPhone($faker->phoneNumber);
         $user->setPassword($this->passwordEncoder->encodePassword($user,"123456"));
         $user->setEnabled(true);
+        $user->setBalance($faker->numberBetween(50,1000));
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
@@ -130,7 +131,7 @@ class AppFixture extends Fixture
             $product->setDescription($faker->text(450));
             $product->setShortDescription($faker->text(200));
             $product->setStartPrice($faker->numberBetween(500,10000));
-            $product->setCrrentPrice($product->getStartPrice());
+            $product->setCurrentPrice($product->getStartPrice());
             $product->setMaxBidPrice($faker->numberBetween(150,400));
             $product->setMinBidPrice($faker->numberBetween(50,100));
             $product->setStartedAt($faker->dateTimeBetween('now','+5 days'));
