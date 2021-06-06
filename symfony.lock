@@ -126,6 +126,15 @@
     "gesdinet/jwt-refresh-token-bundle": {
         "version": "v0.12.0"
     },
+    "guzzlehttp/guzzle": {
+        "version": "7.3.0"
+    },
+    "guzzlehttp/promises": {
+        "version": "1.4.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.8.2"
+    },
     "laminas/laminas-code": {
         "version": "4.3.0"
     },
@@ -171,6 +180,12 @@
     "nikic/php-parser": {
         "version": "v4.10.5"
     },
+    "paragonie/random_compat": {
+        "version": "v9.99.100"
+    },
+    "paragonie/sodium_compat": {
+        "version": "v1.16.1"
+    },
     "php": {
         "version": "7.4"
     },
@@ -192,11 +207,32 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
+    "psr/http-client": {
+        "version": "1.0.1"
+    },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/link": {
         "version": "1.0.0"
     },
     "psr/log": {
         "version": "1.1.4"
+    },
+    "pusher/pusher-php-server": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "8dd3ea817217453e14ab596317177465211e01d2"
+        },
+        "files": [
+            "./config/packages/pusher_php_server.yaml"
+        ]
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
     },
     "symfony/asset": {
         "version": "v5.2.7"
@@ -328,6 +364,9 @@
     },
     "symfony/polyfill-php80": {
         "version": "v1.22.1"
+    },
+    "symfony/polyfill-php81": {
+        "version": "v1.23.0"
     },
     "symfony/polyfill-uuid": {
         "version": "v1.23.0"
