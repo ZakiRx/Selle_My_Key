@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Controller\OrderController;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -13,13 +14,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={},
  *     collectionOperations={
  *     "get"={"security"="is_granted('ROLE_ADMIN') or object.getSeller()==user"},
- *     "post"={"security"="is_granted('ROLE_ADMIN')"}
+ *     "post"={"security"="is_granted('ROLE_ADMIN')"},
  *     },
  *     itemOperations={
  *     "put"={"security"="is_granted('ROLE_ADMIN') or object.getSeller()==user"},
  *     "patch"={"security"="is_granted('ROLE_ADMIN') or object.getSeller()==user"},
  *     "delete"={"security"="is_granted('ROLE_ADMIN')"},
- *     "get"={"security"="is_granted('ROLE_ADMIN') or object.getSeller()==user"}
+ *     "get"={"security"="is_granted('ROLE_ADMIN') or object.getSeller()==user"},
+ *
  *     }
  * )
  * @ORM\Entity(repositoryClass=OrderRepository::class)

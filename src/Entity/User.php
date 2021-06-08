@@ -8,9 +8,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\UserController;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -19,15 +19,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     denormalizationContext={"groups"={"user:write","seller:write"}},
  *     collectionOperations={
  *     "get",
- *     "post"={"security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"}
+ *     "post"={"security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"},
+ *     "get_profil"={
+ *       "method"="GET",
+ *       "path"="/me",
+ *       "controller"=UserController::class,
+ *       "normalization_context"={"groups"={"user:me","user:item","user:collection","seller:item"}}
+ *     }
  *     },
  *     itemOperations={
  *     "put"={"security"="is_granted('ROLE_ADMIN') or object==user"},
  *     "delete"={"security"="is_granted('ROLE_ADMIN') or object==user"},
  *     "get"={
  *           "normalization_context"={"groups"={"user:item","user:collection","seller:item"}}
- *       }
- *     }
+ *       },
+ *    }
  * )
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\InheritanceType(value="SINGLE_TABLE")
@@ -150,7 +156,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="float", nullable=true, options={"default" : 0})
-     * @Groups({"user:item","user:write"})
+     * @Groups({"user:me","user:write"})
      */
     private $balance;
 
@@ -448,7 +454,6 @@ class User implements UserInterface
 
         return $this;
     }
-
     /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
