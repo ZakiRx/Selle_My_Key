@@ -3,14 +3,26 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+
+/**
+ * @ApiResource(
+ *     normalizationContext={"groups"={"secret:collection"}},
+ *     denormalizationContext={"groups"={"secret:write"}}
+ * )
+ * Class Secret
+ * @package App\Entity
+ */
 class Secret
 {
     private  $id;
     /**
-     * @Groups({debot:write})
+     * @Groups({"secret:write"})
      */
     private  $amount;
+    /*
     private $metadata;
 
     /**

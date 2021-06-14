@@ -20,9 +20,12 @@ class Debot
 
     private  $id;
     /**
-     * @Groups({debot:write})
+     * @Groups({"debot:write"})
      */
     private  $balnce;
+    /**
+     * @Groups({"debot:write"})
+     */
     private $result;
 
     /**

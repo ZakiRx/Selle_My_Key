@@ -7,9 +7,21 @@ namespace App\DataPersister;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Entity\Order;
 use App\Entity\Purchase;
+use Doctrine\ORM\EntityManagerInterface;
 
 class PurchaseDataPersister implements ContextAwareDataPersisterInterface
 {
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+
+        $this->entityManager = $entityManager;
+    }
 
     public function supports($data, array $context = []): bool
     {
@@ -18,12 +30,19 @@ class PurchaseDataPersister implements ContextAwareDataPersisterInterface
 
     public function persist($data, array $context = [])
     {
+        $data->setUpdatedAt(new \DateTime('now'));
+        $data->setCreatedAt(new \DateTime('now'));
+
         $order = new Order();
         $order->setCreatedAt(new \DateTime('now'));
-        $order->setSeller($data->getBid()->getSeller());
+        $order->setSeller($data->getBid()->getProduct()->getSeller());
         $order->setStatus("confirme");
+        $this->entityManager->persist($data);
         $order->setPurchase($data);
-        dd($order);
+        $this->entityManager->persist($order);
+        $this->entityManager->flush();
+
+
 
     }
 
