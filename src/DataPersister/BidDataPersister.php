@@ -51,7 +51,6 @@ class BidDataPersister implements ContextAwareDataPersisterInterface
                     " And " . ($data->getProduct()->getCurrentPrice() + $data->getProduct()->getMaxBidPrice())]), 406);
             }
             if ($data->getUser()->getBalance() >= $data->getPrice()) {
-
                 $this->returnMoney($data);
                 $data->getUser()->setBalance(($data->getUser()->getBalance() - $data->getPrice()));
                 $data->getProduct()->setCurrentPrice($data->getPrice());

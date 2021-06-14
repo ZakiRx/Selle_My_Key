@@ -57,15 +57,15 @@ class AppFixture extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = faker::create();
-       // $this->addUsers($faker);
-       //$this->addGenre($faker);
-       //$this->addProducts($faker);
-        //$this->addComments($faker);
-        //$this->addRatings($faker);
-        //$this->addBids($faker);
+        $this->addUsers($faker);
+       $this->addGenre($faker);
+       $this->addProducts($faker);
+        $this->addComments($faker);
+        $this->addRatings($faker);
+        $this->addBids($faker);
         //$this->addPurchase($faker);
        // $this->addOrder($faker);
-        $this->addFavorite($faker);
+      //  $this->addFavorite($faker);
     }
 
     public function  addUsers(Generator $faker){
@@ -187,8 +187,8 @@ class AppFixture extends Fixture
     }
     public function addPurchase(Generator $faker){
         $products=$this->productRepository->findAll();
-        $product= $products[$faker->numberBetween(0,count($products)-1)];
-        $bid=$product->getBids()[count($product->getBids())-1];/*get last bid (winner)*/
+        $product= $products[$faker->numberBetween(0,count($products)-2)];
+        $bid=$product->getBids()[count($product->getBids())-2];/*get last bid (winner)*/
         $purchase = new Purchase();
         $purchase->setBid($bid);
         $purchase->setState("en cour");

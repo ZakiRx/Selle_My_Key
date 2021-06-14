@@ -13,9 +13,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     normalizationContext={"groups"="purchase:collection"},
  *     denormalizationContext={"groups"="purchase:write"},
  *     collectionOperations={
+ *     "post",
  *     "get"={"security"="is_granted('ROLE_ADMIN') or object.getBid().getUser()==user"},
  *     },
  *     itemOperations={
+ *     "put",
  *     "get"={
  *           "normalization_context"={"groups"={"purchase:item","purchase:collection"}},
  *           "security"="is_granted('ROLE_ADMIN') or object.getBid().getUser()==user"
