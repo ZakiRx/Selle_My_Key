@@ -25,7 +25,11 @@ security:
             pattern: ^/api/token/refresh
             stateless: true
             anonymous: true
-        signUp:
+        products:
+            pattern: ^/api/products
+            stateless: true
+            anonymous: true
+        register:
             pattern: ^/api/users
             stateless: true
             anonymous: true

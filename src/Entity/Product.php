@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Controller\ProductController;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 
 /**
@@ -26,8 +27,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  *     "patch"={"security"="is_granted('ROLE_ADMIN') or object.getSeller() == user"},
  *     "get"={
  *           "normalization_context"={"groups"={"product:item","product:collection","product:read"}}
- *       }
- *     })
+ *       },
+ *
+ *    })
  * @ApiFilter(BooleanFilter::class,properties={"verified","enabled"})
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
