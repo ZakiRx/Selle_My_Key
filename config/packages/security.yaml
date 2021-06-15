@@ -25,14 +25,17 @@ security:
             pattern: ^/api/token/refresh
             stateless: true
             anonymous: true
-        products:
-            pattern: ^/api/products
-            stateless: true
-            anonymous: true
         register:
             pattern: ^/api/users
             stateless: true
             anonymous: true
+        products:
+            pattern: ^/api/products
+            stateless: true
+            anonymous: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
         api:
             pattern: ^/api
             stateless: true

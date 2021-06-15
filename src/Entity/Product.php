@@ -18,7 +18,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  *     normalizationContext={"groups"={"product:collection","product:read"}},
  *     denormalizationContext={"groups"="product:write"},
  *     collectionOperations={
- *     "get",
+ *     "get"={"security"="is_granted('IS_AUTHENTICATED_ANONYMOUSLY')"},
  *     "post"={"security"="is_granted('ROLE_SELLER')"}
  *     },
  *     itemOperations={
@@ -101,7 +101,7 @@ class Product
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"product:collection","product:item","product:write"})
-     * @Assert\DateTime()
+     * @Assert\Type("\DateTimeInterface")
      * @Assert\NotBlank()
      */
     private $startedAt;
@@ -109,7 +109,7 @@ class Product
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"product:collection","product:item","product:write"})
-     * @Assert\DateTime()
+     * @Assert\Type("\DateTimeInterface")
      * @Assert\NotBlank()
      */
     private $endedAt;
