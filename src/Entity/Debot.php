@@ -9,7 +9,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"dobot:collection"}},
- *     denormalizationContext={"groups"={"debot:write"}}
+ *     denormalizationContext={"groups"={"debot:write"}},
+ *     collectionOperations={
+ *     "post"={
+ *      "controller"=DebotController::class
+ *     }
+ *    }
  * )
  * Class Debot
  * @package App\Entity

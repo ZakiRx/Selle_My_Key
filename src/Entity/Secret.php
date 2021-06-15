@@ -4,22 +4,28 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\PostSecretController;
 use Symfony\Component\Serializer\Annotation\Groups;
-
 
 /**
  * @ApiResource(
  *     normalizationContext={"groups"={"secret:collection"}},
- *     denormalizationContext={"groups"={"secret:write"}}
+ *     denormalizationContext={"groups"={"secret:write"}},
+ *     collectionOperations={
+ *     "post"={
+ *     "controller"=PostSecretController::class
+ *     }
+ *     }
  * )
  * Class Secret
  * @package App\Entity
  */
 class Secret
 {
+
     private  $id;
     /**
-     * @Groups({"secret:write"})
+     * @Groups({"secret:write","secret:collection"})
      */
     private  $amount;
     /*

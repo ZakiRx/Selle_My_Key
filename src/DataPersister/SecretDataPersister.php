@@ -9,7 +9,7 @@ use App\Entity\Secret;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
 
-class SecretDataPersister implements  ContextAwareDataPersisterInterface
+class SecretDataPersister
 {
 
     public function supports($data, array $context = []): bool
@@ -19,6 +19,7 @@ class SecretDataPersister implements  ContextAwareDataPersisterInterface
 
     public function persist($data, array $context = [])
     {
+
         Stripe::setApiKey('sk_test_51J2IzxCCXlvNqL8W6vuylPvxs8m24QR7J29yWtvX1zTTP0Pek1IyHa4DSxUQvuhMDIdr5etOKWLYTaGa1Hn9gigt00vzlfydNn');
         $intent = PaymentIntent::create([
             'amount' => $data->getAmount(),

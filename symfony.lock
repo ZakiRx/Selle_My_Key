@@ -237,6 +237,9 @@
     "ralouphie/getallheaders": {
         "version": "3.0.3"
     },
+    "stripe/stripe-php": {
+        "version": "v7.83.0"
+    },
     "symfony/asset": {
         "version": "v5.2.7"
     },

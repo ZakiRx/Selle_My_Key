@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 
 
-class DebotDataPersister implements  ContextAwareDataPersisterInterface
+class DebotDataPersister 
 {
     /**
      * @var Security

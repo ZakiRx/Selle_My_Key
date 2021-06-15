@@ -58,7 +58,7 @@ class BidDataPersister implements ContextAwareDataPersisterInterface
                 $this->entityManager->flush();
                 $pushuerData['username'] = $data->getUser()->getUsername();
                 $pushuerData['price'] = $data->getPrice();
-                $this->pusher->trigger('channel-bid', 'bid-add', $pushuerData);
+                $this->pusher->trigger('channel-bid-'.$data->getProduct()->getId(), 'bid-add', $pushuerData);
                 return new Response(json_encode(['message' => "Bid Has Been Added"]), 201);
             }
             return new Response(json_encode(['message' => "Your Balance less than : " . $data->getPrice()]), 406);
